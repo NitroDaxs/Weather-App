@@ -3,7 +3,7 @@ import axios from "axios";
 
 const app = express();
 const port = 3000;
-const APIid = "154ef6b2bbe1b6115aea8e0f50c32f4f";
+const APIid = ;
 
 app.use(express.static("public"));
 
