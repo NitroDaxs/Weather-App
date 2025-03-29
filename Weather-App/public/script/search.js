@@ -1,7 +1,5 @@
-import "dotenv/config";
 const suggestionsBox = document.querySelector(".suggestions");
 const inputBox = document.querySelector("#input-box");
-const APIid = process.env.API_KEY;
 
 inputBox.onkeyup = async function () {
   try {
