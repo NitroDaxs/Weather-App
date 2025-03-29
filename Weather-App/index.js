@@ -5,7 +5,6 @@ import "dotenv/config";
 const APIid = process.env.API_KEY;
 const app = express();
 const port = 3000;
-const APIid = "154ef6b2bbe1b6115aea8e0f50c32f4f";
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
