@@ -63,6 +63,32 @@ app.get("/weather", async (req, res) => {
   }
 });
 
+app.get("/search-suggestions", async (req, res) => {
+  try {
+    const inputBox = req.query.q;
+    if (inputBox.length > 1) {
+      const response = await axios.get(
+        `http://api.openweathermap.org/geo/1.0/direct?q=${inputBox}&limit=5&appid=${APIid}`
+      );
+
+      const suggestions = response.data.map((city) => {
+        return {
+          name: city.name,
+          country: city.country,
+          lat: city.lat,
+          lon: city.lon,
+        };
+      });
+
+      res.json(suggestions);
+    } else {
+      res.json([]);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 async function manipulateData(data) {
   data.main.temp = Math.round(data.main.temp - 273.15);
   data.main.feels_like = Math.round(data.main.feels_like - 273.15);

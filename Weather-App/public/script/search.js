@@ -3,24 +3,9 @@ const inputBox = document.querySelector("#input-box");
 
 inputBox.onkeyup = async function () {
   try {
-    if (inputBox.value.length > 1) {
-      const response = await axios.get(
-        `http://api.openweathermap.org/geo/1.0/direct?q=${inputBox.value}&limit=5&appid=${APIid}`
-      );
-
-      result = response.data.map((city) => {
-        return {
-          name: city.name,
-          country: city.country,
-          lat: city.lat,
-          lon: city.lon,
-        };
-      });
-
-      display(result);
-    } else {
-      suggestionsBox.innerHTML = "";
-    }
+    const response = await axios.get(`/search-suggestions?q=${inputBox.value}`);
+    const result = response.data;
+    display(result);
   } catch (err) {
     console.log(err);
   }
