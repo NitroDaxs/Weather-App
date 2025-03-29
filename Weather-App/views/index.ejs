@@ -6,116 +6,89 @@
     <link rel="stylesheet" href="styles/styles.css">
     <title>Document</title>
 </head>
-<body>
+<body style="background-image: url('<%= image %>');">
     <div class="container">
         <div class="degrees-box">
-            <% if (locals.data) { %>
-                <div class="city">
-                <h2><%= local.data.name %></h2>
-            </div>
-            <% } else { %>
-
-            <% } %>
             <div class="city">
-                <h2>Sofia</h2>
-            </div>
+                <h2><%= content.name %>, <%= content.sys.country %></h2>
+            </div>     
             <div class="date">
-                <h2>18:58, Fri, 28 March</h2>
+                <h2><%= content.dt %></h2>
             </div>
-            <div class="degrees">
-                <h1>20°</h1>
+            <div class="icon-degrees">
+                <div class="degrees">
+                    <h1><%= content.main.temp%>°</h1>
+                </div>
+                
             </div>
-            <div class="feels-like">
-                <h2>Feels like 18°</h2>
+                <div class="feels-like">
+                <h2>Feels like <%= content.main.feels_like %>°</h2>
             </div>
         </div>
+       
         <div class = "featured-info">
             <div class="search-bar">
                 <form action="/weather" method="get" autocomplete="off">
-                <div >
-                    <input type="text" name="city" class="input-box" placeholder="Search...">
+                <div class="search-input">
+                    <input type="search" name="city" id="input-box" placeholder="Search..." autocomplete="off" onkeyup="suggestion()" >
+                    <button class ="search-button" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                      </svg></button>
                 </div>
-                <div id="suggestions"></div>
-            </form></div>
+                <div class="suggestions">
+                </form>
+            </div>
+        </div>
             <div class ="cities">
+                <% cities.forEach(city => { %>
                 <div class="city-box">
-                    <h2>Sofia</h2>
-                    <h2>23°</h2>
+                    <h2><%= city.name %></h2>
+                    <div>
+                        <h2><%= city.main.temp %>°</h2>
+                        <img class="currentIcon" src="https://openweathermap.org/img/wn/<%= city.weather[0].icon %>.png" alt="">
+                    </div>
                 </div>
-                <div class="city-box">
-                    <h2>Dubai</h2>
-                    <h2>23°</h2>
-                </div>
-                <div class="city-box">
-                    <h2>London</h2>
-                    <h2>23°</h2>
-                </div>
-                <div class="city-box">
-                    <h2>New York</h2>
-                    <h2>23°</h2>
-                </div>
-                <div class="city-box">
-                    <h2>Sidney</h2>
-                    <h2>23°</h2>
-                </div>
-                <div class="city-box">
-                    <h2>Tokyo</h2>
-                    <h2>23°</h2>
-                </div>
-                <div class="city-box">
-                    <h2>Paris</h2>
-                    <h2>23°</h2>
-                </div>
-                <div class="city-box">
-                    <h2>Berlin</h2>
-                    <h2>23°</h2>
-                </div>
+               <% }); %>
             </div>
         </div>
         <div class = "hourly-forecast">
-            <div>
+            <div> 
                 <h3>current</h3>
-                <h2>20°</h2>
+                <h2><%= content.main.temp %>°</h2>
+                <img class="currentIcon" src="https://openweathermap.org/img/wn/<%= content.weather[0].icon %>.png" alt="">
             </div>
-            <div>
-                <h3>+1h</h3>
-                <h2>18°</h2>
-            </div>
-            <div>
-                <h3>+2h</h3>
-                <h2>17°</h2>
-            </div>
-            <div>
-                <h3>+3h</h3>
-                <h2>15°</h2>
-            </div>
-            <div>
-                <h3>+4h</h3>
-                <h2>14°</h2>
-            </div>
-            <div>
-                <h3>+5h</h3>
-                <h2>10°</h2>
-            </div>
+            <% hourly.forEach(hourly => { %>
+                <div>
+                    <h3><%= hourly.hours %>:00</h3>
+                    <h2><%= hourly.temp %>°</h2>
+                    <img class="currentIcon" src="https://openweathermap.org/img/wn/<%= hourly.icon %>.png" alt="">
+                </div>
+                <% }); %>
         </div>
         <div class="forecast">
             <div>
                  <h3>Wind</h3>
-                <h4>23 km/h</h4>
+                <h4><%= content.wind.speed %> km/h</h4>
             </div>
             <div>
                 <h3>Humidity</h3>
-                <h4>86%</h4>
+                <h4><%= content.main.humidity %>%</h4>
             </div>
             <div>
                 <h3>Pressure</h3>
-                <h4>1004 mb</h4>
+                <h4><%= content.main.pressure %> mb</h4>
             </div>
             <div>
                 <h3>Rain</h3>
-                <h4>83 mm</h4>
+                <% if (content.rain == null) { %>
+                    <h4>0 mm/h</h4>
+                <% }else { %>
+                    <h4><%= content.rain["1h"] %> mm/h</h4>
+                <% } %>
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script/search.js"></script>
 </body>
 </html>
