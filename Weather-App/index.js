@@ -22,11 +22,13 @@ app.get("/", async (req, res) => {
     const hourlyData = await manipulateHourlyData(hourlyForecast.data);
     const featuredCities = await getFeaturedCities();
     const backGroundImage = await getImage(data);
+    const weeklyForecast = await manipulateWeeklyData(hourlyForecast.data);
     res.render("index.ejs", {
       content: data,
       hourly: hourlyData,
       cities: featuredCities,
       image: backGroundImage,
+      weekly: weeklyForecast,
     });
   } catch (err) {
     console.log(err);
@@ -51,12 +53,14 @@ app.get("/weather", async (req, res) => {
     const hourlyData = await manipulateHourlyData(hourlyForecast.data);
     const featuredCities = await getFeaturedCities();
     const backGroundImage = await getImage(data);
-
+    const weeklyForecast = await manipulateWeeklyData(hourlyForecast.data);
+    console.log(weeklyForecast);
     res.render("index.ejs", {
       content: data,
       hourly: hourlyData,
       cities: featuredCities,
       image: backGroundImage,
+      weekly: weeklyForecast,
     });
   } catch (err) {
     console.log(err);
@@ -134,11 +138,43 @@ async function getFeaturedCities() {
   }
 }
 
+async function manipulateWeeklyData(data) {
+  let list = data.list;
+  let dailyTemps = {};
+
+  for (let i = 0; i < list.length; i++) {
+    let date = list[i].dt_txt.split(" ")[0];
+    let temp = Math.round(list[i].main.temp - 273.15);
+    if (!dailyTemps[date]) {
+      dailyTemps[date] = {
+        low: Number.MAX_SAFE_INTEGER,
+        high: -Number.MAX_SAFE_INTEGER,
+      };
+    }
+
+    dailyTemps[date].low = Math.min(dailyTemps[date].low, temp);
+    dailyTemps[date].high = Math.max(dailyTemps[date].high, temp);
+  }
+  let result = Object.keys(dailyTemps).map((date) => ({
+    date:
+      new Date(date).getDate() +
+      "." +
+      (new Date(date).getMonth() + 1) +
+      "." +
+      new Date(date).getFullYear(),
+    highTemp: dailyTemps[date].high,
+    lowTemp: dailyTemps[date].low,
+  }));
+
+  return result;
+}
 async function getImage(data) {
   try {
     let temp = data.main.temp;
     let weather = data.weather[0].description;
-    if (weather.includes("rain") && weather.includes("snow") && temp <= 0) {
+    if (temp <= 0) {
+      return "images/snowy.png";
+    } else if (weather.includes("rain")) {
       return "images/rain.jpg";
     } else if (weather.includes("cloud")) {
       return "images/clouds.jpg";

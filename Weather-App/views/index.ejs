@@ -68,25 +68,42 @@
         </div>
         <div class="forecast">
             <div>
-                 <h3>Wind</h3>
-                <h4><%= content.wind.speed %> km/h</h4>
-            </div>
+
+                <div>
+                    <div>
+                        <h3>Wind</h3>
+                        <h4><%= content.wind.speed %> km/h</h4>
+                    </div>
+                    <div>
+                        <h3>Humidity</h3>
+                        <h4><%= content.main.humidity %>%</h4>
+                    </div>
+                </div>
+                <div>
+                    
+                    <div>
+                        <h3>Pressure</h3>
+                        <h4><%= content.main.pressure %> mb</h4>
+                    </div>
+                    <div>
+                        <h3>Rain</h3>
+                        <% if (content.rain == null) { %>
+                            <h4>0 mm/h</h4>
+                            <% }else { %>
+                                <h4><%= content.rain["1h"] %> mm/h</h4>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+        <div class="weekly-forecast">
+            <% weekly.forEach(weekly => { %>
             <div>
-                <h3>Humidity</h3>
-                <h4><%= content.main.humidity %>%</h4>
+                <h3><%= weekly.date %></h2>
+                
+                <h3><%= weekly.lowTemp %>° - <%= weekly.highTemp %>° </h3>
             </div>
-            <div>
-                <h3>Pressure</h3>
-                <h4><%= content.main.pressure %> mb</h4>
-            </div>
-            <div>
-                <h3>Rain</h3>
-                <% if (content.rain == null) { %>
-                    <h4>0 mm/h</h4>
-                <% }else { %>
-                    <h4><%= content.rain["1h"] %> mm/h</h4>
-                <% } %>
-            </div>
+            <% }); %>
         </div>
     </div>
 
