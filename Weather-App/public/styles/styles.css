@@ -81,7 +81,7 @@ body{
     grid-row: 1 / 4;
     display: flex ;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     border-bottom: solid 2px #FFFFFF;
     border-left: solid 2px #FFFFFF;
 }
@@ -89,14 +89,14 @@ body{
 .forecast > div{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-content: center;
     height: 100%;
 }
 .forecast > div > div{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-content: center;
     height: 100%;
 }
@@ -109,8 +109,8 @@ body{
     justify-content: space-around;
 }
 
-.weekly-forecast > div > h2{
-
+.weekly-forecast > div > h3{
+    font-size: 1.3rem;
 }
 
 .city > h2{
