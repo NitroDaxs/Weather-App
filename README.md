@@ -8,6 +8,7 @@ A web application that provides real-time weather information for various locati
 - Up to 5 days of temperature forecast.
 - Utilizes external APIs to retrieve up-to-date weather information.
 - User-friendly interface with dynamic content updates.
+- Auto-suggested cities based on user current input.
 
 # Technologies Used
 
